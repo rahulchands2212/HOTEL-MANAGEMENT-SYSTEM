@@ -1,4 +1,5 @@
 #include<stdio.h>
+#include<string.h>
 
 /*------------------------------------function declarations----------------------------------------*/
 void header();
@@ -79,10 +80,13 @@ switch(user_enter){
 /*----------------------------------------structure of booking-----------------------------------------------------*/
 struct customer {
     char name[30];
+    char status[20];
     int room;
     int days;
     float bill;
+    
 }c;
+
 
 /*----------------------------------------room booking--------------------------------------------------------------*/
 void roombooking() {
@@ -100,6 +104,8 @@ void roombooking() {
     printf("Enter Number of Days: ");
     scanf("%d", &c.days);
 
+    strcpy(c.status,"Booked"); //update status;
+
     c.bill = c.days * charge;
 
     printf("\nRoom Booked Successfully!\n");
@@ -107,14 +113,48 @@ void roombooking() {
     printf("Customer Name : %s\n", c.name);
     printf("Room Number   : %d\n", c.room);
     printf("Days Stayed   : %d\n", c.days);
+    printf("room status   : %s\n",c.status);
     printf("Total Bill    : %.2f\n", c.bill);
     printf("----------------------------\n");
+
+    /*------------------------------------put data on file--------------------*/
+
+    FILE *fptr;
+    fptr = fopen("record.txt","a");
+
+    if(fptr==NULL){
+        printf("file not created");
+    }
+
+
+
+    fprintf(fptr,"NAME        : %s\n",c.name);
+    fprintf(fptr,"ROOM NUMBER : %d\n",c.room);
+    fprintf(fptr,"DAYS STAYED : %d\n",c.days);
+    fprintf(fptr,"ROOM STATUS : %s\n",c.status);
+    fprintf(fptr,"------------------------------------------------------------------------------------\n");
+
+    fclose(fptr);
+
+   header();
 }
 
 
 /*-------------------------------------------MAIN FUNCTION------------------------------------------------------------*/
 
 int main(){
+    /*-----------------store heading on record file-----------------------------*/
+    FILE *fptr;
+    fptr = fopen("record.txt","a");
+
+    if(fptr==NULL){
+        printf("file not created");
+    }
+   
+    fprintf(fptr,"---------------------ROOMS STATUS-----------------------------\n\n");
+    fclose(fptr);
+
     header();
+   
     return 0;
 }
